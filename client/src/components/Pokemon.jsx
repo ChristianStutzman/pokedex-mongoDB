@@ -6,7 +6,7 @@ export default class Pokemon extends React.Component {
     this.state = {
 
     }
-    this.pokemon = props.pokemon;
+    this.props = props;
   }
 
 
@@ -14,8 +14,8 @@ export default class Pokemon extends React.Component {
   render() {
     return (
       <div>
-        <h3>{this.pokemon.name}</h3>
-        <img src={this.pokemon.img} />
+        <h3>{this.props.pokemon.name}</h3>
+        <img src={this.props.pokemon.img} />
       </div>
     )
   }

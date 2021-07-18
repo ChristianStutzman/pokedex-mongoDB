@@ -5,7 +5,9 @@ const controller = require('./controller.js');
 router
   .route('/pokemon')
   .get((req, res, next) => {
-    controller.getPokemon()
+    let type = req.url.split('=')[1];
+    !type ? type = null : type = type;
+    controller.getPokemon(type)
       .then(data => {
         res.statusCode = 200;
         res.json(data);

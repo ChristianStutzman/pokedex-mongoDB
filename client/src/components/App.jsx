@@ -9,10 +9,13 @@ export default class App extends React.Component {
       pokemonList: []
     }
     this.fetchPokemon = this.fetchPokemon.bind(this);
+    this.sortPokemon = this.sortPokemon.bind(this);
   }
 
-  fetchPokemon() {
-    axios.get('http://localhost:3000/api/pokemon')
+  fetchPokemon(type = '') {
+    axios.get('http://localhost:3000/api/pokemon/', {
+      params: {type: type}
+    })
       .then(data => {
         console.log('pokemon list:', data.data);
         this.setState({
@@ -22,6 +25,11 @@ export default class App extends React.Component {
       .catch(err => {
         console.log(err);
       })
+  }
+
+  sortPokemon(e) {
+    e.preventDefault();
+    this.fetchPokemon(e.target.value);
   }
 
   componentDidMount() {
@@ -35,7 +43,7 @@ export default class App extends React.Component {
         <div>
           <h1>Pokemon!</h1>
           <button>Show All</button>
-          <select id="type">
+          <select id="type" onChange={this.sortPokemon}>
             <option>Sort by Type</option>
             <option>Grass</option>
             <option>Fire</option>

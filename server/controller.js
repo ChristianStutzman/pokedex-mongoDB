@@ -1,8 +1,8 @@
 const express = require('express');
 const methods = require('../db/methods.js');
 
-let getPokemon = () => {
-  return methods.getPokemon();
+let getPokemon = (type) => {
+  return methods.getPokemon(type);
 }
 
 module.exports = {
