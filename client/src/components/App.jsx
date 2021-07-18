@@ -10,6 +10,9 @@ export default class App extends React.Component {
     }
     this.fetchPokemon = this.fetchPokemon.bind(this);
     this.sortPokemon = this.sortPokemon.bind(this);
+    this.showAll = this.showAll.bind(this);
+    this.updateName = this.updateName.bind(this);
+    this.pokemonList;
   }
 
   fetchPokemon(type = '') {
@@ -18,6 +21,7 @@ export default class App extends React.Component {
     })
       .then(data => {
         console.log('pokemon list:', data.data);
+        this.pokemonList = data.data;
         this.setState({
           pokemonList: data.data
         });
@@ -29,11 +33,43 @@ export default class App extends React.Component {
 
   sortPokemon(e) {
     e.preventDefault();
-    this.fetchPokemon(e.target.value);
+    let result = [];
+    for (let pokemon of this.pokemonList) {
+      if (pokemon.type === e.target.value) {
+        result.push(pokemon);
+      }
+    }
+    this.setState({
+      pokemonList: result
+    })
+    // this.fetchPokemon(e.target.value);
+  }
+
+  showAll() {
+    this.setState({
+      pokemonList: this.pokemonList
+    })
   }
 
   componentDidMount() {
-    this.fetchPokemon()
+    this.fetchPokemon();
+  }
+
+  updateName(prevName, newName) {
+    let pokemonList = this.state.pokemonList;
+    for (let i = 0; i < pokemonList.length; i++) {
+      if (pokemonList[i].name === prevName) {
+        pokemonList[i].name = newName;
+      }
+    }
+    for (let i = 0; i < this.pokemonList.length; i++) {
+      if (this.pokemonList[i].name === prevName) {
+        this.pokemonList[i].name = newName;
+      }
+    }
+    this.setState({
+      pokemonList: pokemonList
+    })
   }
 
 
@@ -42,7 +78,7 @@ export default class App extends React.Component {
       <div>
         <div>
           <h1>Pokemon!</h1>
-          <button>Show All</button>
+          <button onClick={this.showAll} >Show All</button>
           <select id="type" onChange={this.sortPokemon}>
             <option>Sort by Type</option>
             <option>Grass</option>
@@ -59,7 +95,7 @@ export default class App extends React.Component {
             <option>Dragon</option>
           </select>
           <button>INSERT</button>
-          {this.state.pokemonList.map(pokemon => <Pokemon pokemon={pokemon} />)}
+          {this.state.pokemonList.map(pokemon => <Pokemon pokemon={pokemon} updateName={this.updateName} />)}
         </div>
       </div>
     )
