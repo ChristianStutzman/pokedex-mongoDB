@@ -13,6 +13,7 @@ export default class App extends React.Component {
     this.showAll = this.showAll.bind(this);
     this.updateName = this.updateName.bind(this);
     this.pokemonList;
+    this.delete = this.delete.bind(this);
   }
 
   fetchPokemon(type = '') {
@@ -51,9 +52,23 @@ export default class App extends React.Component {
     })
   }
 
-  componentDidMount() {
-    this.fetchPokemon();
+  delete(name) {
+    let pokemonList = this.state.pokemonList;
+    for (let i = 0; i < pokemonList.length; i++) {
+      if (pokemonList[i].name === name) {
+        pokemonList.splice(i, 1);
+      }
+    }
+    for (let i = 0; i < this.pokemonList.length; i++) {
+      if (this.pokemonList[i].name === name) {
+        this.pokemonList.splice(i, 1);
+      }
+    }
+    this.setState({
+      pokemonList: pokemonList
+    })
   }
+
 
   updateName(prevName, newName) {
     let pokemonList = this.state.pokemonList;
@@ -72,6 +87,9 @@ export default class App extends React.Component {
     })
   }
 
+  componentDidMount() {
+    this.fetchPokemon();
+  }
 
   render() {
     return (
@@ -95,7 +113,7 @@ export default class App extends React.Component {
             <option>Dragon</option>
           </select>
           <button>INSERT</button>
-          {this.state.pokemonList.map(pokemon => <Pokemon pokemon={pokemon} updateName={this.updateName} />)}
+          {this.state.pokemonList.map(pokemon => <Pokemon pokemon={pokemon} updateName={this.updateName} delete={this.delete} />)}
         </div>
       </div>
     )

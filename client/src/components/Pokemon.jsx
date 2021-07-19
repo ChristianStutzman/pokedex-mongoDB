@@ -25,6 +25,7 @@ export default class Pokemon extends React.Component {
         <h3 onClick={this.changeName}>{this.props.pokemon.name}</h3>
         <img src={this.props.pokemon.img} />
         <div id={this.props.pokemon.name}></div>
+        <button type="button" onClick={() => this.props.delete(this.props.pokemon.name)}>Delete</button>
       </div>
     )
   }
