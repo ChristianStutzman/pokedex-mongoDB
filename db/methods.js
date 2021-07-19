@@ -11,7 +11,12 @@ let getPokemon = async (type) => {
   }
 }
 
+let postPokemon = async (data) => {
+  return await Pokemon.create(data);
+}
+
 
 module.exports = {
-  getPokemon
+  getPokemon,
+  postPokemon
 }

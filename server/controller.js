@@ -5,6 +5,11 @@ let getPokemon = (type) => {
   return methods.getPokemon(type);
 }
 
+let postPokemon = (data) => {
+  return methods.postPokemon(data);
+}
+
 module.exports = {
-  getPokemon
+  getPokemon,
+  postPokemon
 }

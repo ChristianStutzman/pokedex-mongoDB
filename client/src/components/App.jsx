@@ -1,12 +1,15 @@
 import React from 'react';
+import ReactDom from 'react-dom';
 import axios from 'axios';
 import Pokemon from './Pokemon.jsx';
+import Insert from './Insert.jsx';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      pokemonList: []
+      pokemonList: [],
+      currentType: ''
     }
     this.fetchPokemon = this.fetchPokemon.bind(this);
     this.sortPokemon = this.sortPokemon.bind(this);
@@ -14,6 +17,8 @@ export default class App extends React.Component {
     this.updateName = this.updateName.bind(this);
     this.pokemonList;
     this.delete = this.delete.bind(this);
+    this.renderInsert = this.renderInsert.bind(this);
+    this.insert = this.insert.bind(this);
   }
 
   fetchPokemon(type = '') {
@@ -41,9 +46,9 @@ export default class App extends React.Component {
       }
     }
     this.setState({
-      pokemonList: result
+      pokemonList: result,
+      currentType: e.target.value
     })
-    // this.fetchPokemon(e.target.value);
   }
 
   showAll() {
@@ -87,6 +92,28 @@ export default class App extends React.Component {
     })
   }
 
+  renderInsert(e) {
+    e.preventDefault();
+    ReactDom.render(<Insert insert={this.insert} />, document.getElementById("insert"))
+  }
+
+  insert(pokeData) {
+    axios.post('http://localhost:3000/api/pokemon/', pokeData)
+      .then(res => {
+        this.pokemonList.push(pokeData);
+        if (this.state.currentType === pokeData.type || this.state.currentType === '') {
+          let tempList = this.state.pokemonList;
+          tempList.push(pokeData);
+          this.setState({
+            pokemonList: tempList
+          })
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
   componentDidMount() {
     this.fetchPokemon();
   }
@@ -112,7 +139,8 @@ export default class App extends React.Component {
             <option>Ghost</option>
             <option>Dragon</option>
           </select>
-          <button>INSERT</button>
+          <button onClick={this.renderInsert}>INSERT</button>
+          <div id="insert"></div>
           {this.state.pokemonList.map(pokemon => <Pokemon pokemon={pokemon} updateName={this.updateName} delete={this.delete} />)}
         </div>
       </div>

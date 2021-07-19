@@ -16,6 +16,17 @@ router
         res.statusCode = 404;
         res.json(data);
       })
-  });
+  })
+  .post((req, res, next) => {
+    controller.postPokemon(req.body)
+    .then(data => {
+      res.statusCode = 201;
+      res.json(data);
+    })
+    .catch(err => {
+      res.statusCode = 404;
+      res.json(data);
+    })
+  })
 
   module.exports = router;
